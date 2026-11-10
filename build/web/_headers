@@ -1,0 +1,10 @@
+/*
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: require-corp
+  Access-Control-Allow-Origin: *
+
+/*.wasm
+  Content-Type: application/wasm
+
+/*.pck
+  Content-Type: application/octet-stream

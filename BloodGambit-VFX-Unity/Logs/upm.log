@@ -1,0 +1,18 @@
+[2026-11-09T13:40:11.098Z][INFO] Command-line: 'C:\\Program Files\\Unity\\Hub\\Editor\\6000.6.7f1\\Editor\\Data\\Resources\\PackageManager\\Server\\UnityPackageManager.exe' server -s 20628 --ipc-path Unity-Upm-20628 -l 2 --log-file D:\\ponly\\BloodGambit-VFX-Unity/Logs/upm.log
+[2026-11-09T13:40:11.179Z][INFO] IPC server started (IPC path=Unity-Upm-20628).
+[2026-11-09T13:40:11.179Z][INFO] Hint: To connect to this UPM instance, launch Unity with the command-line parameter -upmIpcPath Upm-20628.
+[2026-11-09T13:40:37.439Z][INFO] project:list-packages <-- Request received
+params: {}
+[2026-11-09T13:40:37.445Z][INFO] project:list-packages --> 404 (7 ms)
+[2026-11-09T13:40:40.286Z][INFO] project:update-dependencies <-- Request received
+params: {}
+[2026-11-09T13:40:40.331Z][INFO] project:update-dependencies --> 200 (45 ms)
+[2026-11-09T13:40:40.363Z][INFO] project:resolve-packages <-- Request received
+params: {}
+[2026-11-09T13:40:40.752Z][INFO] Downloading package [com.unity.package-manager.metadata-6000.6@0.0.101] from registry 'https://packages.unity.com'
+[2026-11-09T13:40:41.167Z][INFO] Finished downloading package [com.unity.package-manager.metadata-6000.6@0.0.101] from registry 'https://packages.unity.com' (size: 11.5 kB, time: 414ms)
+[2026-11-09T13:40:44.959Z][INFO] project:resolve-packages --> 200 (4596 ms)
+[2026-11-09T13:41:12.128Z][INFO] project:list-packages <-- Request received
+params: {}
+[2026-11-09T13:41:12.245Z][INFO] project:list-packages --> 200 (117 ms)
+[2026-11-09T13:41:15.772Z][INFO] Shutting down UnityPackageManager.exe: parent process [20628] is no longer running.

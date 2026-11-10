@@ -1,0 +1,22 @@
+# Godot executable and shortcuts
+*.exe
+*.lnk
+
+# Godot cache & import directory (recreated automatically)
+.godot/
+
+# Python cache & tools
+__pycache__/
+*.pyc
+
+# OS generated
+Thumbs.db
+.DS_Store
+*.tmp
+
+# Unity generated
+BloodGambit-VFX-Unity/Library/
+BloodGambit-VFX-Unity/Temp/
+BloodGambit-VFX-Unity/Logs/
+BloodGambit-VFX-Unity/obj/
+BloodGambit-VFX-Unity/UserSettings/

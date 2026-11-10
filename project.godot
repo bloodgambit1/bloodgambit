@@ -1,0 +1,29 @@
+; Engine configuration file.
+; Godot จะเติมค่าอื่น ๆ ให้เองตอนเปิดโปรเจกต์ครั้งแรก
+
+config_version=5
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+
+[application]
+
+config/name="Blood Gambit"
+run/main_scene="res://scenes/ui/main_menu.tscn"
+boot_splash/image="res://art/ui/splash_blood_gambit.png"
+boot_splash/bg_color=Color(0.04, 0.045, 0.065, 1)
+boot_splash/show_image=true
+boot_splash/fullsize=false
+boot_splash/use_filter=true
+
+[physics]
+
+; ทำให้ตัวละครกับกล้องเคลื่อนที่ลื่นบนจอที่รีเฟรชเรตสูงกว่า 60Hz
+common/physics_interpolation=true
+
+[input_devices]
+
+; ให้คลิกเมาส์ทำงานเหมือนการแตะจอ — ใช้ทดสอบโหมดมือถือบน PC (ดู force_touch_mode)
+pointing/emulate_touch_from_mouse=true

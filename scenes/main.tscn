@@ -1,0 +1,186 @@
+[gd_scene load_steps=19 format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/combat_input_controller.gd" id="1_combat"]
+[ext_resource type="Script" path="res://scripts/combat/fighter_controller.gd" id="2_fighter"]
+[ext_resource type="Script" path="res://scripts/combat/combat_ai.gd" id="3_ai"]
+[ext_resource type="Script" path="res://scripts/ui/fighter_debug_hud.gd" id="4_hud"]
+[ext_resource type="Script" path="res://scripts/camera/duel_camera_controller.gd" id="5_camera"]
+[ext_resource type="Script" path="res://scripts/chess/chess_arena_manager.gd" id="6_chess"]
+[ext_resource type="Script" path="res://scripts/skills/fighter_skills.gd" id="7_skills"]
+[ext_resource type="PackedScene" path="res://scenes/ui/mobile_controls.tscn" id="8_mobile"]
+[ext_resource type="Script" path="res://scripts/animation/fighter_animator.gd" id="9_animator"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_body"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape_body"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_visor"]
+size = Vector3(0.5, 0.15, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="Material_floor"]
+albedo_color = Color(0.22, 0.24, 0.27, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_floor"]
+material = SubResource("Material_floor")
+size = Vector3(14, 1, 14)
+
+[sub_resource type="BoxShape3D" id="BoxShape_floor"]
+size = Vector3(14, 1, 14)
+
+[sub_resource type="BoxShape3D" id="BoxShape_wall_x"]
+size = Vector3(14, 4, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape_wall_z"]
+size = Vector3(0.5, 4, 14)
+
+[sub_resource type="StandardMaterial3D" id="Material_pillar"]
+albedo_color = Color(0.55, 0.38, 0.25, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pillar"]
+material = SubResource("Material_pillar")
+size = Vector3(0.6, 3, 0.6)
+
+[node name="Main" type="Node3D"]
+
+[node name="MobileControls" parent="." node_paths=PackedStringArray("player") instance=ExtResource("8_mobile")]
+player = NodePath("../Arena/Player")
+
+[node name="CombatInputController" type="Node" parent="." node_paths=PackedStringArray("mobile_controls")]
+script = ExtResource("1_combat")
+mobile_controls = NodePath("../MobileControls")
+
+[node name="BoardCamera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 22, 20)
+current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, 0.25, -0.433013, 0, 0.866025, 0.5, 0.5, -0.433013, 0.75, 0, 10, 0)
+shadow_enabled = true
+
+[node name="Arena" type="Node3D" parent="."]
+
+[node name="Floor" type="StaticBody3D" parent="Arena"]
+
+[node name="Mesh" type="MeshInstance3D" parent="Arena/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+mesh = SubResource("BoxMesh_floor")
+
+[node name="Collision" type="CollisionShape3D" parent="Arena/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape_floor")
+
+[node name="WallNorth" type="CollisionShape3D" parent="Arena/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -7.25)
+shape = SubResource("BoxShape_wall_x")
+
+[node name="WallSouth" type="CollisionShape3D" parent="Arena/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 7.25)
+shape = SubResource("BoxShape_wall_x")
+
+[node name="WallEast" type="CollisionShape3D" parent="Arena/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.25, 2, 0)
+shape = SubResource("BoxShape_wall_z")
+
+[node name="WallWest" type="CollisionShape3D" parent="Arena/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.25, 2, 0)
+shape = SubResource("BoxShape_wall_z")
+
+[node name="Pillars" type="Node3D" parent="Arena"]
+
+[node name="Pillar1" type="MeshInstance3D" parent="Arena/Pillars"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 1.5, 6)
+mesh = SubResource("BoxMesh_pillar")
+
+[node name="Pillar2" type="MeshInstance3D" parent="Arena/Pillars"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1.5, 6)
+mesh = SubResource("BoxMesh_pillar")
+
+[node name="Pillar3" type="MeshInstance3D" parent="Arena/Pillars"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 1.5, -6)
+mesh = SubResource("BoxMesh_pillar")
+
+[node name="Pillar4" type="MeshInstance3D" parent="Arena/Pillars"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1.5, -6)
+mesh = SubResource("BoxMesh_pillar")
+
+[node name="Player" type="CharacterBody3D" parent="Arena" node_paths=PackedStringArray("input_controller", "target", "body_mesh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.5)
+script = ExtResource("2_fighter")
+fighter_name = "Player"
+input_controller = NodePath("../../CombatInputController")
+target = NodePath("../Enemy")
+body_mesh = NodePath("Body")
+base_color = Color(0.3, 0.5, 1, 1)
+
+[node name="Body" type="MeshInstance3D" parent="Arena/Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_body")
+
+[node name="Visor" type="MeshInstance3D" parent="Arena/Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, -0.45)
+mesh = SubResource("BoxMesh_visor")
+
+[node name="Collision" type="CollisionShape3D" parent="Arena/Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape_body")
+
+[node name="Skills" type="Node" parent="Arena/Player"]
+script = ExtResource("7_skills")
+
+[node name="Animator" type="Node" parent="Arena/Player"]
+script = ExtResource("9_animator")
+
+[node name="Enemy" type="CharacterBody3D" parent="Arena" node_paths=PackedStringArray("target", "body_mesh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+script = ExtResource("2_fighter")
+fighter_name = "Enemy"
+model_tint = Color(0.45, 0.42, 0.5, 1)
+is_white_faction = false
+target = NodePath("../Player")
+body_mesh = NodePath("Body")
+
+[node name="Body" type="MeshInstance3D" parent="Arena/Enemy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_body")
+
+[node name="Visor" type="MeshInstance3D" parent="Arena/Enemy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, -0.45)
+mesh = SubResource("BoxMesh_visor")
+
+[node name="Collision" type="CollisionShape3D" parent="Arena/Enemy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape_body")
+
+[node name="Skills" type="Node" parent="Arena/Enemy"]
+script = ExtResource("7_skills")
+
+[node name="Animator" type="Node" parent="Arena/Enemy"]
+script = ExtResource("9_animator")
+print_animation_list = false
+
+[node name="EnemyAI" type="Node" parent="Arena" node_paths=PackedStringArray("fighter")]
+script = ExtResource("3_ai")
+fighter = NodePath("../Enemy")
+
+[node name="DuelCamera" type="Camera3D" parent="Arena" node_paths=PackedStringArray("player", "target")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 6)
+script = ExtResource("5_camera")
+player = NodePath("../Player")
+target = NodePath("../Enemy")
+
+[node name="ChessArenaManager" type="Node3D" parent="." node_paths=PackedStringArray("board_camera", "duel_camera", "arena", "player_fighter", "enemy_fighter", "combat_input", "combat_hud", "sun", "plain_arena_visuals")]
+script = ExtResource("6_chess")
+board_camera = NodePath("../BoardCamera")
+duel_camera = NodePath("../Arena/DuelCamera")
+arena = NodePath("../Arena")
+player_fighter = NodePath("../Arena/Player")
+enemy_fighter = NodePath("../Arena/Enemy")
+combat_input = NodePath("../CombatInputController")
+combat_hud = NodePath("../DebugHUD")
+sun = NodePath("../DirectionalLight3D")
+plain_arena_visuals = [NodePath("../Arena/Floor/Mesh"), NodePath("../Arena/Pillars")]
+
+[node name="DebugHUD" type="CanvasLayer" parent="." node_paths=PackedStringArray("player", "enemy")]
+script = ExtResource("4_hud")
+player = NodePath("../Arena/Player")
+enemy = NodePath("../Arena/Enemy")
